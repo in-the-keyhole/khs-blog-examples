@@ -15,7 +15,16 @@ namespace CurrentTemperature
 		MonoTouch.UIKit.UILabel lblTemp { get; set; }
 
 		[Outlet]
+		MonoTouch.UIKit.UILabel lblCityState { get; set; }
+
+		[Outlet]
 		MonoTouch.UIKit.UIButton btnRefresh { get; set; }
+
+		[Outlet]
+		MonoTouch.UIKit.UILabel lblCondition { get; set; }
+
+		[Outlet]
+		MonoTouch.UIKit.UILabel lblWind { get; set; }
 
 		[Action ("Refresh:")]
 		partial void Refresh (MonoTouch.Foundation.NSObject sender);
@@ -27,9 +36,24 @@ namespace CurrentTemperature
 				lblTemp = null;
 			}
 
+			if (lblCityState != null) {
+				lblCityState.Dispose ();
+				lblCityState = null;
+			}
+
 			if (btnRefresh != null) {
 				btnRefresh.Dispose ();
 				btnRefresh = null;
+			}
+
+			if (lblCondition != null) {
+				lblCondition.Dispose ();
+				lblCondition = null;
+			}
+
+			if (lblWind != null) {
+				lblWind.Dispose ();
+				lblWind = null;
 			}
 		}
 	}

@@ -15,6 +15,7 @@ namespace CurrentTemperature
 		// Initialize a location manager
 		private CLLocationManager iPhoneLocationManager = null;
 		private Weather CurrentWeather { get; set; }
+		private Location CurrentLocation { get; set; }
 
 		public CurrentTemperatureViewController () : base ("CurrentTemperatureViewController", null)
 		{
@@ -49,6 +50,10 @@ namespace CurrentTemperature
 				iPhoneLocationManager.StopUpdatingHeading();
 			}
 			lblTemp.Text = CurrentWeather.Temperature + "° F";
+			lblCondition.Text = CurrentWeather.Condition;
+			lblWind.Text = CurrentWeather.Wind;
+			lblCityState.Text = string.Format("{0}, {1}", CurrentLocation.City, CurrentLocation.State);
+
 		}
 
 		
@@ -74,6 +79,9 @@ namespace CurrentTemperature
 		{
 			CurrentWeather = null;
 			lblTemp.Text = "";
+			lblCondition.Text = "";
+			lblWind.Text = "";
+			lblCityState.Text = "";
 			iPhoneLocationManager.StartUpdatingLocation();
 			iPhoneLocationManager.StartUpdatingHeading();
 		}
@@ -105,15 +113,18 @@ namespace CurrentTemperature
 
 			public void ReverseGeocodeLocationHandle (CLPlacemark[] placemarks, NSError error)
 			{
-				string loc = null;
+				Location loc = new Location();
 				for (int i = 0; i < placemarks.Length; i++) {
-					loc = placemarks [i].PostalCode;
+					loc.Zipcode = placemarks [i].PostalCode;
+					loc.City = placemarks[i].Locality;
+					loc.State = placemarks[i].AdministrativeArea;
 				}
 
-				if (loc != null && screen.CurrentWeather == null) 
+				if (screen.CurrentWeather == null) 
 				{
 					var service = new GoogleWeatherService();
-					screen.CurrentWeather = service.CurrentWeather(loc);
+					screen.CurrentWeather = service.CurrentWeather(loc.Zipcode);
+					screen.CurrentLocation = loc;
 					screen.DisplayScreen();
 				}
 
