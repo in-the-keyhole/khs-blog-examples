@@ -95,7 +95,10 @@ namespace CurrentTemperature
         public class LocationDelegate : CLLocationManagerDelegate
         {
 			private CLGeocoder geocoder = null;
-            
+			private IWeatherService WeatherService {
+				get { return new YahooWeatherService (); }
+			}
+
 			private CurrentTemperatureViewController screen;
             public LocationDelegate (CurrentTemperatureViewController screen) : base()
             {
@@ -122,8 +125,7 @@ namespace CurrentTemperature
 
 				if (screen.CurrentWeather == null) 
 				{
-					var service = new GoogleWeatherService();
-					screen.CurrentWeather = service.CurrentWeather(loc.Zipcode);
+					screen.CurrentWeather = WeatherService.CurrentWeather(loc.Zipcode);
 					screen.CurrentLocation = loc;
 					screen.DisplayScreen();
 				}
