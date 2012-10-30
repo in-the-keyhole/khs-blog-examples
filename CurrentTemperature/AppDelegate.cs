@@ -15,7 +15,6 @@ namespace CurrentTemperature
 	{
 		// class-level declarations
 		UIWindow window;
-		CurrentTemperatureViewController viewController;
 
 		//
 		// This method is invoked when the application has loaded and is ready to run. In this 
@@ -28,8 +27,7 @@ namespace CurrentTemperature
 		{
 			window = new UIWindow (UIScreen.MainScreen.Bounds);
 			
-			viewController = new CurrentTemperatureViewController ();
-			window.RootViewController = viewController;
+			window.RootViewController = new CurrentTemperatureViewController ();;
 			window.MakeKeyAndVisible ();
 			
 			return true;

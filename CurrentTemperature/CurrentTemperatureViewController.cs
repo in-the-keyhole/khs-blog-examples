@@ -21,22 +21,13 @@ namespace CurrentTemperature
 		{
 		}
 		
-		public override void DidReceiveMemoryWarning ()
-		{
-			// Releases the view if it doesn't have a superview.
-			base.DidReceiveMemoryWarning ();
-			
-			// Release any cached data, images, etc that aren't in use.
-		}
-		
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
 			
 			// Perform any additional setup after loading the view, typically from a nib.
 			iPhoneLocationManager = new CLLocationManager();
-			LocationDelegate locationDelegate = new LocationDelegate(this);
-			iPhoneLocationManager.Delegate = locationDelegate;
+			iPhoneLocationManager.Delegate = new LocationDelegate(this);
 
 			iPhoneLocationManager.StartUpdatingLocation();
 			iPhoneLocationManager.StartUpdatingHeading();
@@ -44,16 +35,10 @@ namespace CurrentTemperature
 
 		public void DisplayScreen ()
 		{
-			if (CurrentWeather != null) 
-			{
-				iPhoneLocationManager.StopUpdatingLocation();
-				iPhoneLocationManager.StopUpdatingHeading();
-			}
 			lblTemp.Text = CurrentWeather.Temperature + "° F";
 			lblCondition.Text = CurrentWeather.Condition;
 			lblWind.Text = CurrentWeather.Wind;
 			lblCityState.Text = string.Format("{0}, {1}", CurrentLocation.City, CurrentLocation.State);
-
 		}
 
 		
@@ -111,6 +96,8 @@ namespace CurrentTemperature
 				{
 					geocoder = new CLGeocoder ();
 					geocoder.ReverseGeocodeLocation (newLocation, ReverseGeocodeLocationHandle);
+					manager.StopUpdatingHeading();
+					manager.StopUpdatingLocation();
 				}
             }
 
